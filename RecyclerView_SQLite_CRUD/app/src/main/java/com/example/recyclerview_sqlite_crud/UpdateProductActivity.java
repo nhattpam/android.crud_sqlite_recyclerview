@@ -63,12 +63,18 @@ public class UpdateProductActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 // Get the updated values from the EditText fields
-                String updatedProductName = productNameEditText.getText().toString();
-                String updatedDescription = descriptionEditText.getText().toString();
-                double updatedPrice = Double.parseDouble(priceEditText.getText().toString());
+                String updatedProductName = productNameEditText.getText().toString().trim();;
+                String updatedDescription = descriptionEditText.getText().toString().trim();;
+                String updatedPrice =priceEditText.getText().toString();
+
+                if (updatedProductName.isEmpty() || updatedDescription.isEmpty() || updatedPrice.isEmpty()) {
+                    Toast.makeText(UpdateProductActivity.this, "Please enter all fields", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                double price = Double.parseDouble(updatedPrice);
 
                 // Create a new Product object with the updated values
-                Product updatedProduct = new Product(productId, updatedProductName, updatedDescription, updatedPrice);
+                Product updatedProduct = new Product(productId, updatedProductName, updatedDescription, price);
 
                 // Update the product in the database
                 boolean success = databaseHelper.updateProduct(updatedProduct);
