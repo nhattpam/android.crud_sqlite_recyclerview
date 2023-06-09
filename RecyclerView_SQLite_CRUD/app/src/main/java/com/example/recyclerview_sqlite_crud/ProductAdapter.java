@@ -15,7 +15,6 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.google.gson.Gson;
 
 import java.util.List;
 
@@ -86,10 +85,7 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductV
         Intent intent = new Intent(context, UpdateProductActivity.class);
         intent.putExtra("productId", product.getId());
         intent.putExtra("position", position);
-//       khong the sai cach nay: intent.putExtra("productList", productList);
-        //truyen list bang gson
-        Gson gson = new Gson();
-        String productListJson = gson.toJson(productList);
+
         context.startActivity(intent);
     }
 

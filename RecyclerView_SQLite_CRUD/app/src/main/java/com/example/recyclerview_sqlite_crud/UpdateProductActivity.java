@@ -2,14 +2,14 @@ package com.example.recyclerview_sqlite_crud;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
 
 import java.lang.reflect.Type;
 import java.util.List;
@@ -26,6 +26,7 @@ public class UpdateProductActivity extends AppCompatActivity {
 
     private DatabaseHelper databaseHelper;
     private int productId;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -74,20 +75,8 @@ public class UpdateProductActivity extends AppCompatActivity {
 
                 if (success) {
                     // Update the dataset in the adapter
-
-                    if (productListJson != null) {
-                        // Convert the productListJson back to a List<Product> using Gson
-                        Gson gson = new Gson();
-                        Type productListType = new TypeToken<List<Product>>() {}.getType();
-                        productList = gson.fromJson(productListJson, productListType);
-
-                        // Ensure that productList is not null
-                        if (productList != null) {
-                            productList.set(position, product);
-                            productAdapter.notifyItemChanged(position);
-                        }
-
-                    }
+                    Intent intent = new Intent(UpdateProductActivity.this, ProductActivity.class);
+                    startActivity(intent);
 
                     Toast.makeText(UpdateProductActivity.this, "Product updated successfully", Toast.LENGTH_SHORT).show();
                     finish(); // Finish the activity and go back to the previous screen
