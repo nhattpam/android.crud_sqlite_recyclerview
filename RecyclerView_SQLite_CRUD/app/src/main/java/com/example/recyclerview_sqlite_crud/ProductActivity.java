@@ -21,7 +21,7 @@ public class ProductActivity extends AppCompatActivity {
     private RecyclerView recyclerView;
     private ProductAdapter productAdapter;
     private List<Product> productList;
-    private DatabaseHelper databaseHelper;
+    private DatabaseHelper databaseHelper = new DatabaseHelper(this);
 
     //insert
     private Button addButton;
@@ -35,9 +35,9 @@ public class ProductActivity extends AppCompatActivity {
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
         productList = new ArrayList<>();
-        productAdapter = new ProductAdapter(productList);
+        productAdapter = new ProductAdapter(productList, this, databaseHelper);
         recyclerView.setAdapter(productAdapter);
-
+//khai bao moi chay duoc k thi null object
         databaseHelper = new DatabaseHelper(this);
         loadProductData();
 

@@ -93,33 +93,40 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return productList;
     }
 
-    public void updateProduct(Product product) {
+    public boolean updateProduct(Product product) {
         SQLiteDatabase db = getWritableDatabase();
-
         ContentValues values = new ContentValues();
         values.put(COLUMN_PRODUCT_NAME, product.getProductName());
         values.put(COLUMN_DESCRIPTION, product.getDescription());
         values.put(COLUMN_PRICE, product.getPrice());
-
-        int rowsAffected = db.update(
-                TABLE_PRODUCT,
-                values,
-                COLUMN_ID + " = ?",
-                new String[]{String.valueOf(product.getId())}
-        );
-
+        int rowsAffected = db.update(TABLE_PRODUCT, values, COLUMN_ID + "=?", new String[]{String.valueOf(product.getId())});
         db.close();
+
+        // Notify the adapter about the updated product
+
+        return rowsAffected > 0;
     }
 
-    public void deleteProduct(Product product) {
+    public boolean deleteProduct(int productId) {
         SQLiteDatabase db = getWritableDatabase();
-
-        int rowsAffected = db.delete(
-                TABLE_PRODUCT,
-                COLUMN_ID + " = ?",
-                new String[]{String.valueOf(product.getId())}
-        );
-
+        int rowsAffected = db.delete(TABLE_PRODUCT, COLUMN_ID + "=?", new String[]{String.valueOf(productId)});
         db.close();
+        return rowsAffected > 0;
+    }
+
+    public Product getProduct(int productId) {
+        SQLiteDatabase db = getReadableDatabase();
+        Cursor cursor = db.query(TABLE_PRODUCT, null, COLUMN_ID + "=?", new String[]{String.valueOf(productId)}, null, null, null);
+        Product product = null;
+        if (cursor.moveToFirst()) {
+            int id = cursor.getInt(cursor.getColumnIndex(COLUMN_ID));
+            String productName = cursor.getString(cursor.getColumnIndex(COLUMN_PRODUCT_NAME));
+            String description = cursor.getString(cursor.getColumnIndex(COLUMN_DESCRIPTION));
+            double price = cursor.getDouble(cursor.getColumnIndex(COLUMN_PRICE));
+            product = new Product(id, productName, description, price);
+        }
+        cursor.close();
+        db.close();
+        return product;
     }
 }
